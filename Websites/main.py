@@ -2,8 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def Active(domain, txt):
-    hostname = domain
+def Active(hostname, txt):
     try:
         response = requests.get(hostname, headers={'User-Agent': 'AdsBot-Google'}, timeout=2)
         print(f"\n{hostname}")
