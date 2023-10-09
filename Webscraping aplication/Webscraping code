@@ -1,0 +1,64 @@
+# de parameters die wij gaan toevoegen aan het neural network zijn
+# 1: Of er de woorden: fee calculator, whatsapp, crypto, bitcoin, pay by phone, call toll free in zitten
+# 2: De hoeveelheid foutgespelde woorden DONE
+# 3: https of https
+# 4: lengte van de url
+# 5: als de method post wordt gebruikt
+# 6: bij image preloading
+# 7: dit soort characters: “//*” “<!” “ =” “//..//”.
+# 8: Het aantal src
+# 9: het aantal hrefs
+# 10: hoe oud de website is DONE
+# 10: De hoeveelheid van characters zoals !, ?, -, *
+# al deze parameters gaan wij in verschillende functies stoppen om het zo overzichtelijk mogelijk te maken
+
+
+from bs4 import BeautifulSoup
+import requests
+import hunspell
+import whois
+import datetime
+
+
+def get_oldness_months(domain):
+    try:
+        loaded_domain = whois.whois(domain) # get the whois data
+        date = loaded_domain.get("creation_date")
+        if isinstance(date, list):
+            return (datetime.datetime.now() - date[0]).total_seconds() / 86400 # return the date difference in days
+        else:
+            return (datetime.datetime.now() - date).total_seconds() / 86400 # return the date difference in days
+    except:
+        return 0
+
+
+def spell_check(wordlist):
+    h = hunspell.Hunspell()
+    misspelled = [word for word in wordlist if not h.spell(word)]
+    return len(misspelled) # returns the misspelled
+
+def check_keywords(wordlist):
+    print("kak")
+
+def get_formattedwords(soup):
+    text = soup.body.get_text(' ', strip=True)
+    words = text.split()  # gets the wordlist
+    cleaned_words = []
+    for word in words:
+        new_word = ''.join(letter for letter in word if letter.isalnum()) # formats it
+        cleaned_words.append(new_word.lower())
+    return cleaned_words
+
+if __name__ == '__main__':
+
+
+    url = "https://www.waitispot.com"
+
+    # getting the soup
+    page = requests.get("https://www.waitispot.com", headers={'User-Agent': 'AdsBot-Google'})
+    soup = BeautifulSoup(page.text, 'html.parser')
+
+    # dit is om alle tekst te krijgen
+    text_formatted = get_formattedwords(soup)
+
+    print(spell_check(text_formatted))
