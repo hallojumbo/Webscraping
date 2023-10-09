@@ -1,22 +1,20 @@
 # de parameters die wij gaan toevoegen aan het neural network zijn
 # 1: Of er de woorden: fee calculator, whatsapp, crypto, bitcoin, pay by phone, call toll free in zitten
 # 2: De hoeveelheid foutgespelde woorden DONE
-# 3: https of https   DONE
-# 4: lengte van de url  DONE
+# 3: https of https
+# 4: lengte van de url
 # 5: als de method post wordt gebruikt
-# 6: bij image preloading
+# 6: bij image preloading DONE
 # 7: dit soort characters: “//*” “<!” “ =” “//..//”.
-# 8: Het aantal src
-# 9: het aantal hrefs
-# 10: hoe oud de website is DONE
-# 10: De hoeveelheid van characters zoals !, ?, -, *
+# 8: Het aantal srcs en hrefs
+# 9: hoe oud de website is DONE
 # al deze parameters gaan wij in verschillende functies stoppen om het zo overzichtelijk mogelijk te maken
 
 
 from bs4 import BeautifulSoup
 import requests
-import hunspell
-import whois
+import hunspell #cyhunspell
+import whois #python-whois
 import datetime
 
 
@@ -31,11 +29,6 @@ def get_oldness_months(domain):
     except:
         return 0
 
-def urlcheck(url):
-    if url[:5] == "https":
-        return [len(url) - 8, "https"]
-    return [len(url) - 7, "http"]
-
 def spell_check(wordlist):
     h = hunspell.Hunspell()
     misspelled = [word for word in wordlist if not h.spell(word)]
@@ -43,6 +36,12 @@ def spell_check(wordlist):
 
 def check_keywords(wordlist):
     print("kak")
+
+def check_preloads(soup):
+    return str(soup).count("preload")
+
+def check_links(soup):
+    return str(soup).count("href") + str(soup).count("src")
 
 def get_formattedwords(soup):
     text = soup.body.get_text(' ', strip=True)
@@ -53,14 +52,20 @@ def get_formattedwords(soup):
         cleaned_words.append(new_word.lower())
     return cleaned_words
 
+def urlcheck(url):
+    if url[:5] == "https":
+        return [len(url) - 8, "https"]
+    return [len(url) - 7, "http"]
+
 if __name__ == '__main__':
 
 
     url = "https://www.waitispot.com"
 
     # getting the soup
-    page = requests.get("https://www.waitispot.com", headers={'User-Agent': 'AdsBot-Google'})
+    page = requests.get("https://www.youtube.com/watch?v=FRxmR0ICvTM", headers={'User-Agent': 'AdsBot-Google'})
     soup = BeautifulSoup(page.text, 'html.parser')
+
 
     # dit is om alle tekst te krijgen
     text_formatted = get_formattedwords(soup)
