@@ -1,8 +1,8 @@
 # de parameters die wij gaan toevoegen aan het neural network zijn
 # 1: Of er de woorden: fee calculator, whatsapp, crypto, bitcoin, pay by phone, call toll free in zitten
 # 2: De hoeveelheid foutgespelde woorden DONE
-# 3: https of https
-# 4: lengte van de url
+# 3: https of https   DONE
+# 4: lengte van de url  DONE
 # 5: als de method post wordt gebruikt
 # 6: bij image preloading
 # 7: dit soort characters: “//*” “<!” “ =” “//..//”.
