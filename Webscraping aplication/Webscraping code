@@ -31,6 +31,12 @@ def get_oldness_months(domain):
     except:
         return 0
 
+def urlcheck(url):
+    if url[:5] == "https":
+        print("HTTPS")
+    else:
+        print("Http")
+
 
 def spell_check(wordlist):
     h = hunspell.Hunspell()
