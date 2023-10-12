@@ -1,25 +1,63 @@
-# de parameters die wij gaan toevoegen aan het neural network zijn
-# 1: Of er de woorden: fee calculator, whatsapp, crypto, bitcoin, pay by phone, call toll free in zitten
-# 2: De hoeveelheid foutgespelde woorden DONE
-# 3: https of https
-# 4: lengte van de url
-# 5: als de method post wordt gebruikt
-# 6: bij image preloading DONE
-# 7: dit soort characters: “//*” “<!” “ =” “//..//”.
-# 8: Het aantal srcs en hrefs
-# 9: hoe oud de website is DONE
-# al deze parameters gaan wij in verschillende functies stoppen om het zo overzichtelijk mogelijk te maken
-
-
+from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 import requests
 import hunspell #cyhunspell
 import whois #python-whois
 import datetime
+import unicodedata
+from threading import Thread, Lock
+from queue import Queue
 
+# de parameters die wij gaan toevoegen aan het neural network zijn
+# 1: Database voor scam triggerwoorden https://instantly.ai/blog/spam-trigger-words
+def check_keywords(text_lowered, file):
+    f = open(file, "r")
+    count = 0
+    for word in f.readlines():
+        count += text_lowered.count(" " + word.replace("\n", "") + " ")
+    return count
 
-def get_oldness_months(domain):
+# 2: De hoeveelheid foutgespelde woorden
+def spell_check(text_formatted):
+    h = hunspell.Hunspell()
+    misspelled = [word for word in text_formatted if not h.spell(word)] #stuurt de foutgespelde woorden terug
+    return len(misspelled)
+
+# 3: https of https
+# 4: lengte van de url
+def urlcheck(url):
+    if url[:5] == "https":
+        return ["https", len(urlparse(url).netloc)] #DIT MOET JE NOG TERUG VERANDEREN!!!!!
+    return ["http", len(urlparse(url).netloc)]
+
+# 5: als de method post wordt gebruikt
+def check_POST(soup):
+    return str(soup).count("POST")
+
+# 6: bij image preloading
+def check_preloads(soup):
+    return str(soup).count("preload")
+
+# 7: dit soort characters: “//*” “<!” “ =” “//..//”. DONE
+def check_special(soup):
+    special = ["//*" "<!" " =" "//..//"]
+    count = 0
+    for character in special:
+        count += str(soup).count(character)
+    return count
+
+# 8: Het aantal srcs DONE
+def check_srcs(soup):
+    return str(soup).count("src")
+
+# 9: Het aantal hrefs DONE
+def check_hrefs(soup):
+    return str(soup).count("href")
+
+# 10: hoe oud de website is DONE
+def get_oldness_days(url):
     try:
+        domain = urlparse(url).netloc
         loaded_domain = whois.whois(domain) # get the whois data
         date = loaded_domain.get("creation_date")
         if isinstance(date, list):
@@ -28,46 +66,95 @@ def get_oldness_months(domain):
             return (datetime.datetime.now() - date).total_seconds() / 86400 # return the date difference in days
     except:
         return 0
-
-def spell_check(wordlist):
-    h = hunspell.Hunspell()
-    misspelled = [word for word in wordlist if not h.spell(word)]
-    return len(misspelled) # returns the misspelled
-
-def check_keywords(wordlist):
-    print("kak")
-
-def check_preloads(soup):
-    return str(soup).count("preload")
-
-def check_links(soup):
-    return str(soup).count("href") + str(soup).count("src")
-
-def get_formattedwords(soup):
-    text = soup.body.get_text(' ', strip=True)
+#dit is een handige functie om de rest mee te doen
+def get_formattedwords(text):
     words = text.split()  # gets the wordlist
     cleaned_words = []
     for word in words:
-        new_word = ''.join(letter for letter in word if letter.isalnum()) # formats it
-        cleaned_words.append(new_word.lower())
+        new_word = word.encode('ascii','ignore').decode('utf-8') #makes it ascii
+        newer_word = "".join(character for character in new_word if character.isalnum())
+        if newer_word != "":
+            cleaned_words.append(newer_word.lower())
     return cleaned_words
 
-def urlcheck(url):
-    if url[:5] == "https":
-        return [len(url) - 8, "https"]
-    return [len(url) - 7, "http"]
+# Hier worden de scripts uitgewerk met de gemaakte functies
+
+def get_stuff(q, lock, goodorbad):
+    while True:
+        # Wij gaan het opslaan in deze volgorde url, goede website, slechte website,(kenmerken) 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+        # de goodorbad moet [1, 0] zijn voor good en [0, 1] zijn voor bad
+        url = q.get()
+        q.task_done()
+        characteristics = [url]
+        characteristics.extend(goodorbad)
+
+        # Dit zijn alle benodigdheden
+        try:
+            page = requests.get(url, headers={'User-Agent': 'AdsBot-Google'})
+            soup = BeautifulSoup(page.text, 'html.parser')
+            text = soup.body.get_text(' ', strip=True)
+            text_formatted = get_formattedwords(text)
+        except:
+            continue
+
+        # 1
+        characteristics.append(check_keywords(str(text).lower(), "triggerwords.txt"))
+
+        # 2
+        try:
+            characteristics.append(spell_check(text_formatted))
+        except:
+            print(url)
+
+        # 3 en 4
+        characteristics.extend(urlcheck(url))
+
+        # 5
+        characteristics.append(check_POST(soup))
+
+        # 6
+        characteristics.append(check_preloads(soup))
+
+        # 7
+        characteristics.append(check_special(soup))
+
+        # 8
+        characteristics.append(check_srcs(soup))
+
+        # 9
+        characteristics.append(check_hrefs(soup))
+
+        # 10
+        characteristics.append(get_oldness_days(url))
+
+        with lock:
+            print(f"{characteristics},")
 
 if __name__ == '__main__':
+    # print("doing bad websites \n[")
+    # bad = open("Badwebsites.txt", "r")
+    # bad_queue = Queue()
+    # lock = Lock()
+    #
+    # for i in range(10):
+    #     thread = Thread(target=get_stuff, args=(bad_queue, lock, [0, 1]))
+    #     thread.daemon = True
+    #     thread.start()
+    #
+    # for word in bad.readlines():
+    #     bad_queue.put(word.replace("\n", ""))
+    # bad_queue.join()
 
+    print("doing good websites \n[")
+    good = open("Goodwebsites.txt", "r")
+    good_queue = Queue()
+    lock = Lock()
 
-    url = "https://www.waitispot.com"
+    for i in range(10):
+        thread = Thread(target=get_stuff, args=(good_queue, lock, [0, 1]))
+        thread.daemon = True
+        thread.start()
 
-    # getting the soup
-    page = requests.get("https://www.youtube.com/watch?v=FRxmR0ICvTM", headers={'User-Agent': 'AdsBot-Google'})
-    soup = BeautifulSoup(page.text, 'html.parser')
-
-
-    # dit is om alle tekst te krijgen
-    text_formatted = get_formattedwords(soup)
-
-    print(spell_check(text_formatted))
+    for word in good.readlines():
+        good_queue.put(word.replace("\n", ""))
+    good_queue.join()
