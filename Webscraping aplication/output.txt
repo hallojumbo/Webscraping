@@ -206,16 +206,13 @@ doing bad websites
 ['https://www.vanahgear.co.za', 0, 1, 42, 4.508196721311475, 'https', 19, 0, 0, 1, 18, 31, 79.16322943141203],
 ['https://www.africasolarsupply.shop', 0, 1, 86, 8.5, 'https', 26, 121, 0, 38, 80, 124, 135.09774372517361],
 ['https://www.premiumteacupbreeders.co.za', 0, 1, 30, 9.090909090909092, 'https', 31, 0, 0, 1, 36, 56, 32.35147216265046],
-Error trying to connect to socket: closing socket - [Errno 11001] getaddrinfo failed
 ['https://medical-meds-online-pharmacy.business.site', 0, 1, 54, 13.461538461538462, 'https', 42, 57, 0, 19, 36, 29, 0],
 ['https://www.skylineundp.com', 0, 1, 85, 4.868913857677903, 'https', 19, 0, 0, 3, 44, 29, 125.74925503322918],
-Error trying to connect to socket: closing socket - [Errno 11001] getaddrinfo failed
 ['https://aid-chemical-group-llc.business.site', 0, 1, 44, 12.096774193548388, 'https', 36, 59, 0, 19, 24, 32, 0],
 ['https://www.dynamicbreedershome.co.za', 0, 1, 71, 2.557544757033248, 'https', 29, 0, 0, 1, 5, 39, 32.33695510347222],
 ['https://www.saa4papersuppliers.co.za', 0, 1, 38, 14.467005076142131, 'https', 28, 93, 0, 31, 38, 83, 96.14538122621528],
 ['https://www.a4papersupplier.co.za', 0, 1, 35, 12.40506329113924, 'https', 25, 79, 0, 29, 29, 55, 32.356057604050925],
-['https://www.kanbalivestock.com', 0, 1, 61, 3.618421052631579, 'https', 22, 50, 0, 44, 55, 92, 33.47131724326389],Error trying to connect to socket: closing socket - [Errno 11001] getaddrinfo failed
-
+['https://www.kanbalivestock.com', 0, 1, 61, 3.618421052631579, 'https', 22, 50, 0, 44, 55, 92, 33.47131724326389],
 ['https://www.goldenretrieverpups.site', 0, 1, 23, 3.669724770642202, 'https', 28, 0, 4, 45, 77, 28, 0],
 ['https://www.friendlypawshome.co.za', 0, 1, 29, 19.377162629757784, 'https', 26, 18, 0, 45, 24, 99, 35.875314331759256],
 ['http://www.dayoldchicksandfeed.co.za', 0, 1, 21, 9.75609756097561, 'http', 29, 29, 0, 99, 34, 60, 173.21062985989585],
@@ -344,7 +341,6 @@ Error trying to connect to socket: closing socket - [Errno 11001] getaddrinfo fa
 ['https://www.russtobacco.com', 0, 1, 48, 11.032863849765258, 'https', 19, 92, 0, 44, 33, 85, 248.07178654962962],
 ['https://www.frenchilover.com', 0, 1, 40, 4.749340369393139, 'https', 20, 32, 5, 80, 38, 73, 207.52686795059026],
 ['https://www.beaglepuppiesforadoption.com', 0, 1, 127, 3.1777557100297913, 'https', 32, 33, 13, 115, 66, 84, 330.4719195010764],
-Error trying to connect to socket: closing socket - [Errno 11001] getaddrinfo failed
 ['https://www.availablebeauties.site', 0, 1, 40, 3.41726618705036, 'https', 26, 34, 0, 35, 24, 48, 0],
 ['https://www.chowsdiary.com', 0, 1, 38, 2.663934426229508, 'https', 18, 15, 0, 55, 33, 48, 56.30406843987269],
 ['https://www.kalurantrading.com', 0, 1, 96, 5.228758169934641, 'https', 22, 18, 0, 84, 38, 70, 212.25412667797457],
@@ -405,7 +401,6 @@ Error trying to connect to socket: closing socket - [Errno 11001] getaddrinfo fa
 ['https://www.financewealthfx.com', 0, 1, 120, 7.3842302878598245, 'https', 23, 1, 4, 206, 35, 80, 332.27266678908563],
 ['http://www.merit-services.com', 0, 1, 18, 9.649122807017543, 'http', 22, 0, 0, 1, 2, 20, 123.31772635315971],
 ['https://www.247apextrading.com', 0, 1, 130, 15.66757493188011, 'https', 22, 11, 0, 337, 64, 56, 279.40653634184025],
-Error trying to connect to socket: closing socket - [Errno 11001] getaddrinfo failed
 ['https://www.pelicanvisas.sbs', 0, 1, 6, 41.66666666666667, 'https', 20, 3, 0, 8, 23, 25, 0],
 ['https://www.batholivestock.co.za', 0, 1, 46, 5.446623093681917, 'https', 24, 10, 1, 70, 81, 36, 339.4081238762037],
 ['https://www.mboxstorage.com', 0, 1, 78, 3.536345776031434, 'https', 19, 26, 0, 50, 34, 103, 150.13171620113425],
@@ -575,8 +570,8 @@ doing good websites
 ['https://www.l3harris.com/', 1, 0, 51, 12.556053811659194, 'https', 16, 2, 0, 77, 246, 52, 1825.1149038365277],
 ['https://www.abcepta.com/', 1, 0, 139, 12.729948491537895, 'https', 15, 17, 0, 109, 48, 175, 1504.909591842118],
 ['https://www.8minute.com/', 1, 0, 48, 7.441860465116279, 'https', 15, 1, 12, 3, 12, 66, 7041.016399903114],
-['https://www.assetcoopen.xyz', 0, 1, 106, 6.047197640117994, 'https', 19, 21, 2, 131, 52, 98, 77.55788388006944],['https://www.aldila.com/', 1, 0, 67, 17.391304347826086, 'https', 14, 2, 0, 31, 44, 91, 10178.571680199513],
-
+['https://www.assetcoopen.xyz', 0, 1, 106, 6.047197640117994, 'https', 19, 21, 2, 131, 52, 98, 77.55788388006944],
+['https://www.aldila.com/', 1, 0, 67, 17.391304347826086, 'https', 14, 2, 0, 31, 44, 91, 10178.571680199513],
 ['https://www.amgen.com/', 1, 0, 111, 9.264853977844915, 'https', 13, 14, 7, 78, 135, 405, 12130.613356347489],
 ['https://www.americanapparel.com/us/en/', 1, 0, 0, 22.22222222222222, 'https', 23, 0, 0, 8, 18, 22, 9299.613356891598],
 ['https://www.adgreetz.com/', 1, 0, 151, 27.94496990541703, 'https', 16, 12, 0, 14, 404, 254, 4537.036517563102],
@@ -782,7 +777,6 @@ doing good websites
 ['https://www.oceanpacific.com/', 1, 0, 11, 29.357798165137616, 'https', 20, 62, 3, 114, 43, 71, 10081.572249844236],
 ['https://oldnavy.gap.com/', 1, 0, 12, 3.896103896103896, 'https', 15, 0, 4, 13, 116, 196, 10986.613920788415],
 ['https://osirisshoes.com/', 1, 0, 22, 14.465408805031446, 'https', 15, 3, 5, 160, 32, 43, 9595.61392145985],
-Error trying to connect to socket: closing socket - [Errno 11001] getaddrinfo failed
 ['https://paramountpetroleum.ph/', 1, 0, 59, 5.958549222797927, 'https', 21, 0, 0, 2, 25, 26, 0],
 ['https://www.techspot.com/', 1, 0, 143, 18.93899204244032, 'https', 16, 169, 0, 104, 97, 307, 9764.57225658574],
 ['http://www.paclumber.com/', 1, 0, 35, 5.625, 'http', 17, 0, 0, 17, 7, 16, 9856.613934400752],
@@ -1036,7 +1030,6 @@ Error trying to connect to socket: closing socket - [Errno 11001] getaddrinfo fa
 ['https://medium.com/', 1, 0, 54, 15.168539325842698, 'https', 10, 78, 3, 5, 47, 135, 9269.614628889329],
 ['https://tryhackme.com/', 1, 0, 55, 9.066666666666666, 'https', 13, 5, 0, 18, 41, 61, 1924.9575121072453],
 ['https://www.aliexpress.com/', 1, 0, 47, 19.047619047619047, 'https', 18, 0, 0, 62, 23, 194, 6388.019658089653],
-Error trying to connect to socket: closing socket - [Errno 11001] getaddrinfo failed
 ['https://cis2.capex.com.ph/', 1, 0, 5, 20.833333333333336, 'https', 17, 2, 0, 34, 11, 20, 0],
 ['https://www.figma.com/', 1, 0, 66, 11.61137440758294, 'https', 13, 4, 25, 15, 71, 251, 8951.614641125521],
 ['https://search.brave.com/', 1, 0, 0, 8.333333333333332, 'https', 16, 2, 3, 9, 2, 33, 10251.614642850453],
