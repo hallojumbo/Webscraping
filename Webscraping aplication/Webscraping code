@@ -4,7 +4,6 @@ import requests
 import hunspell #cyhunspell
 import whois #python-whois
 import datetime
-import unicodedata
 from threading import Thread, Lock
 from queue import Queue
 
@@ -14,7 +13,7 @@ def check_keywords(text_lowered, file):
     f = open(file, "r")
     count = 0
     for word in f.readlines():
-        count += text_lowered.count(" " + word.replace("\n", "") + " ")
+        count += text_lowered.count(word.replace("\n", ""))
     return count
 
 # 2: De hoeveelheid foutgespelde woorden
@@ -32,15 +31,15 @@ def urlcheck(url):
 
 # 5: als de method post wordt gebruikt
 def check_POST(soup):
-    return str(soup).count("POST")
+    return str(soup).lower().count("post")
 
 # 6: bij image preloading
 def check_preloads(soup):
-    return str(soup).count("preload")
+    return str(soup).lower().count("preload")
 
 # 7: dit soort characters: “//*” “<!” “ =” “//..//”. DONE
 def check_special(soup):
-    special = ["//*" "<!" " =" "//..//"]
+    special = ["//*", "<!", " =", "//..//", "<!--"]
     count = 0
     for character in special:
         count += str(soup).count(character)
@@ -88,7 +87,7 @@ def get_stuff(q, lock, goodorbad):
         characteristics = [url]
         characteristics.extend(goodorbad)
 
-        # Dit zijn alle benodigdheden
+        # Dit zijn alle benodigdheden, een try statement voor als de website niet meer bestaat.
         try:
             page = requests.get(url, headers={'User-Agent': 'AdsBot-Google'})
             soup = BeautifulSoup(page.text, 'html.parser')
@@ -98,7 +97,10 @@ def get_stuff(q, lock, goodorbad):
             continue
 
         # 1
-        characteristics.append(check_keywords(str(text).lower(), "triggerwords.txt"))
+        if len(text_formatted) != 0:
+            characteristics.append(check_keywords(str(text).lower(), "triggerwords.txt") / len(text_formatted) * 100)
+        else:
+            continue
 
         # 2
         characteristics.append(spell_check(text_formatted))
@@ -142,16 +144,20 @@ if __name__ == '__main__':
         bad_queue.put(word.replace("\n", ""))
     bad_queue.join()
 
-    print("doing good websites \n[")
+    print("]\ndoing good websites \n[")
     good = open("Goodwebsites.txt", "r")
     good_queue = Queue()
     lock = Lock()
 
     for i in range(10):
-        thread = Thread(target=get_stuff, args=(good_queue, lock, [0, 1]))
+        thread = Thread(target=get_stuff, args=(good_queue, lock, [1, 0]))
         thread.daemon = True
         thread.start()
 
     for word in good.readlines():
         good_queue.put(word.replace("\n", ""))
     good_queue.join()
+    print("]\ndone")
+
+
+
