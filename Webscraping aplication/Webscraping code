@@ -27,7 +27,7 @@ def spell_check(text_formatted):
 # 4: lengte van de url
 def urlcheck(url):
     if url[:5] == "https":
-        return ["https", len(urlparse(url).netloc)] #DIT MOET JE NOG TERUG VERANDEREN!!!!!
+        return ["https", len(urlparse(url).netloc)]
     return ["http", len(urlparse(url).netloc)]
 
 # 5: als de method post wordt gebruikt
@@ -101,10 +101,7 @@ def get_stuff(q, lock, goodorbad):
         characteristics.append(check_keywords(str(text).lower(), "triggerwords.txt"))
 
         # 2
-        try:
-            characteristics.append(spell_check(text_formatted))
-        except:
-            print(url)
+        characteristics.append(spell_check(text_formatted))
 
         # 3 en 4
         characteristics.extend(urlcheck(url))
@@ -131,19 +128,19 @@ def get_stuff(q, lock, goodorbad):
             print(f"{characteristics},")
 
 if __name__ == '__main__':
-    # print("doing bad websites \n[")
-    # bad = open("Badwebsites.txt", "r")
-    # bad_queue = Queue()
-    # lock = Lock()
-    #
-    # for i in range(10):
-    #     thread = Thread(target=get_stuff, args=(bad_queue, lock, [0, 1]))
-    #     thread.daemon = True
-    #     thread.start()
-    #
-    # for word in bad.readlines():
-    #     bad_queue.put(word.replace("\n", ""))
-    # bad_queue.join()
+    print("doing bad websites \n[")
+    bad = open("Badwebsites.txt", "r")
+    bad_queue = Queue()
+    lock = Lock()
+
+    for i in range(10):
+        thread = Thread(target=get_stuff, args=(bad_queue, lock, [0, 1]))
+        thread.daemon = True
+        thread.start()
+
+    for word in bad.readlines():
+        bad_queue.put(word.replace("\n", ""))
+    bad_queue.join()
 
     print("doing good websites \n[")
     good = open("Goodwebsites.txt", "r")
