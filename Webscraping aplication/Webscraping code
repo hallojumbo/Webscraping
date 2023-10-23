@@ -4,6 +4,7 @@ import requests
 import hunspell #cyhunspell
 import whois #python-whois
 import datetime
+import re
 from threading import Thread, Lock
 from queue import Queue
 
@@ -19,7 +20,10 @@ def check_keywords(text_lowered, file):
 # 2: De hoeveelheid foutgespelde woorden
 def spell_check(text_formatted):
     h = hunspell.Hunspell()
-    misspelled = [word for word in text_formatted if not h.spell(word)] #stuurt de foutgespelde woorden terug
+    misspelled = []
+    for word in text_formatted:
+        if not h.spell(word) and len(h.suggest(word)) > 3 and misspelled.count(word) == 0:
+            misspelled.append(word)
     return len(misspelled)
 
 # 3: https of https
@@ -30,28 +34,28 @@ def urlcheck(url):
     return ["http", len(urlparse(url).netloc)]
 
 # 5: als de method post wordt gebruikt
-def check_POST(soup):
-    return str(soup).lower().count("post")
+def check_POST(page):
+    return page.lower().count("post") * 4 / len(page) * 100
 
 # 6: bij image preloading
-def check_preloads(soup):
-    return str(soup).lower().count("preload")
+def check_preloads(page):
+    return page.lower().count("preload") * 7 / len(page) * 100
 
 # 7: dit soort characters: “//*” “<!” “ =” “//..//”. DONE
-def check_special(soup):
+def check_special(page):
     special = ["//*", "<!", " =", "//..//", "<!--"]
     count = 0
     for character in special:
-        count += str(soup).count(character)
-    return count
+        count += page.count(character) * len(character)
+    return count / len(page) * 100
 
 # 8: Het aantal srcs DONE
-def check_srcs(soup):
-    return str(soup).count("src")
+def check_srcs(page):
+    return page.count("src") * 3 / len(page) * 100
 
 # 9: Het aantal hrefs DONE
-def check_hrefs(soup):
-    return str(soup).count("href")
+def check_hrefs(page):
+    return page.count("href") * 4 / len(page) * 100
 
 # 10: hoe oud de website is DONE
 def get_oldness_days(url):
@@ -59,22 +63,25 @@ def get_oldness_days(url):
         domain = urlparse(url).netloc
         loaded_domain = whois.whois(domain) # get the whois data
         date = loaded_domain.get("creation_date")
-        if isinstance(date, list):
+        if isinstance(date, list): #if there are multiple dates
             return (datetime.datetime.now() - date[0]).total_seconds() / 86400 # return the date difference in days
         else:
             return (datetime.datetime.now() - date).total_seconds() / 86400 # return the date difference in days
     except:
         return 0
-#dit is een handige functie om de rest mee te doen
+#dit zijn handige functies om de rest mee te doen
 def get_formattedwords(text):
     words = text.split()  # gets the wordlist
     cleaned_words = []
     for word in words:
         new_word = word.encode('ascii','ignore').decode('utf-8') #makes it ascii
-        newer_word = "".join(character for character in new_word if character.isalnum())
+
+        newer_word = re.sub(r'[^A-Za-z0-9]+|(\w+-\w+)+', '', new_word)
         if newer_word != "":
-            cleaned_words.append(newer_word.lower())
+            cleaned_words.append(newer_word)
     return cleaned_words
+
+
 
 # Hier worden de scripts uitgewerk met de gemaakte functies
 
@@ -96,32 +103,33 @@ def get_stuff(q, lock, goodorbad):
         except:
             continue
 
-        # 1
-        if len(text_formatted) != 0:
-            characteristics.append(check_keywords(str(text).lower(), "triggerwords.txt") / len(text_formatted) * 100)
-        else:
+        if not len(text_formatted) != 0:
             continue
 
+        #1
+        characteristics.append(check_keywords(text.lower(), "triggerwords.txt") / len(text.strip()) * 100)
+
+
         # 2
-        characteristics.append(spell_check(text_formatted))
+        characteristics.append(spell_check(text_formatted) / len(text_formatted) * 100)
 
         # 3 en 4
         characteristics.extend(urlcheck(url))
 
         # 5
-        characteristics.append(check_POST(soup))
+        characteristics.append(check_POST(page.text))
 
         # 6
-        characteristics.append(check_preloads(soup))
+        characteristics.append(check_preloads(page.text))
 
         # 7
-        characteristics.append(check_special(soup))
+        characteristics.append(check_special(page.text))
 
         # 8
-        characteristics.append(check_srcs(soup))
+        characteristics.append(check_srcs(page.text))
 
         # 9
-        characteristics.append(check_hrefs(soup))
+        characteristics.append(check_hrefs(page.text))
 
         # 10
         characteristics.append(get_oldness_days(url))
@@ -158,6 +166,8 @@ if __name__ == '__main__':
         good_queue.put(word.replace("\n", ""))
     good_queue.join()
     print("]\ndone")
+
+
 
 
 
