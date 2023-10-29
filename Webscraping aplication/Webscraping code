@@ -40,7 +40,7 @@ def check_preloads(page):
 
 # 7: dit soort characters: “//*” “<!” “ =” “//..//”. DONE
 def check_special(page):
-    special = ["//*", "<!", " =", "//..//", "<!--", "-->"]
+    special = ["//*", "<!", " =", "//..//", "<!-- ", " -->"]
     count = 0
     for character in special:
         count += page.count(character) * len(character)
