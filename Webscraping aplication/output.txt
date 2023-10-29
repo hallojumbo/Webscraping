@@ -1,4 +1,3 @@
-D:\PycharmProjects\webscraper\venv\Scripts\python.exe D:\PycharmProjects\webscraper\main.py
 doing bad websites
 [
 ['http://www.basucourier.com', 0, 1, 0.1779359430604982, 0, 'http', 19, 0.06668889629876625, 0.0, 2.2618650661331556, 0.3001000333444481, 0.46682227409136384, 19.881323808125],
