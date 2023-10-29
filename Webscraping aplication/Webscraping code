@@ -1,7 +1,6 @@
 from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 import requests
-import hunspell #cyhunspell
 import whois #python-whois
 import datetime
 import re
@@ -9,22 +8,20 @@ from threading import Thread, Lock
 from queue import Queue
 
 # de parameters die wij gaan toevoegen aan het neural network zijn
-# 1: Database voor scam triggerwoorden https://instantly.ai/blog/spam-trigger-words
+# 1: Database voor scam triggerwoorden https://help.salesforce.com/s/articleView?id=sf.mc_es_trigger_words.htm&type=5
 def check_keywords(text_lowered, file):
     f = open(file, "r")
     count = 0
     for word in f.readlines():
-        count += text_lowered.count(word.replace("\n", ""))
+        count += text_lowered.count((word.replace("\n", "")).lower())
     return count
 
-# 2: De hoeveelheid foutgespelde woorden
-def spell_check(text_formatted):
-    h = hunspell.Hunspell()
-    misspelled = []
-    for word in text_formatted:
-        if not h.spell(word) and len(h.suggest(word)) > 3 and misspelled.count(word) == 0:
-            misspelled.append(word)
-    return len(misspelled)
+# 2: Of het whatsapp bevat
+def check_whatsapp(page):
+    whatsapp_bool = page.lower().count("whatsapp")
+    if whatsapp_bool:
+        return 1
+    return 0
 
 # 3: https of https
 # 4: lengte van de url
@@ -43,7 +40,7 @@ def check_preloads(page):
 
 # 7: dit soort characters: “//*” “<!” “ =” “//..//”. DONE
 def check_special(page):
-    special = ["//*", "<!", " =", "//..//", "<!--"]
+    special = ["//*", "<!", " =", "//..//", "<!--", "-->"]
     count = 0
     for character in special:
         count += page.count(character) * len(character)
@@ -69,6 +66,7 @@ def get_oldness_days(url):
             return (datetime.datetime.now() - date).total_seconds() / 86400 # return the date difference in days
     except:
         return 0
+
 #dit zijn handige functies om de rest mee te doen
 def get_formattedwords(text):
     words = text.split()  # gets the wordlist
@@ -99,11 +97,10 @@ def get_stuff(q, lock, goodorbad):
             page = requests.get(url, headers={'User-Agent': 'AdsBot-Google'})
             soup = BeautifulSoup(page.text, 'html.parser')
             text = soup.body.get_text(' ', strip=True)
-            text_formatted = get_formattedwords(text)
         except:
             continue
 
-        if not len(text_formatted) != 0:
+        if not len(text) != 0:
             continue
 
         #1
@@ -111,7 +108,7 @@ def get_stuff(q, lock, goodorbad):
 
 
         # 2
-        characteristics.append(spell_check(text_formatted) / len(text_formatted) * 100)
+        characteristics.append(check_whatsapp(page.text))
 
         # 3 en 4
         characteristics.extend(urlcheck(url))
@@ -166,8 +163,3 @@ if __name__ == '__main__':
         good_queue.put(word.replace("\n", ""))
     good_queue.join()
     print("]\ndone")
-
-
-
-
-
