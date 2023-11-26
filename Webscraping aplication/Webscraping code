@@ -8,7 +8,7 @@ from threading import Thread, Lock
 from queue import Queue
 
 # de parameters die wij gaan toevoegen aan het neural network zijn
-# 1: Database voor scam triggerwoorden https://help.salesforce.com/s/articleView?id=sf.mc_es_trigger_words.htm&type=5
+# 1: Database voor scam triggerwoorden https://mailmeteor.com/blog/spam-words
 def check_keywords(text_lowered, file):
     f = open(file, "r")
     count = 0
@@ -16,29 +16,14 @@ def check_keywords(text_lowered, file):
         count += text_lowered.count((word.replace("\n", "")).lower())
     return count
 
-# 2: Of het whatsapp bevat
-def check_whatsapp(page):
-    whatsapp_bool = page.lower().count("whatsapp")
-    if whatsapp_bool:
-        return 1
-    return 0
-
-# 3: https of https
-# 4: lengte van de url
+# 2: https of https
+# 3: lengte van de url
 def urlcheck(url):
     if url[:5] == "https":
         return ["https", len(urlparse(url).netloc)]
     return ["http", len(urlparse(url).netloc)]
 
-# 5: als de method post wordt gebruikt
-def check_POST(page):
-    return page.lower().count("post") * 4 / len(page) * 100
-
-# 6: bij image preloading
-def check_preloads(page):
-    return page.lower().count("preload") * 7 / len(page) * 100
-
-# 7: dit soort characters: “//*” “<!” “ =” “//..//”. DONE
+# 4: dit soort characters: “//*” “<!” “ =” “//..//”.
 def check_special(page):
     special = ["//*", "<!", " =", "//..//", "<!-- ", " -->"]
     count = 0
@@ -46,15 +31,7 @@ def check_special(page):
         count += page.count(character) * len(character)
     return count / len(page) * 100
 
-# 8: Het aantal srcs DONE
-def check_srcs(page):
-    return page.count("src") * 3 / len(page) * 100
-
-# 9: Het aantal hrefs DONE
-def check_hrefs(page):
-    return page.count("href") * 4 / len(page) * 100
-
-# 10: hoe oud de website is DONE
+# 5: hoe oud de website is
 def get_oldness_days(url):
     try:
         domain = urlparse(url).netloc
@@ -67,22 +44,17 @@ def get_oldness_days(url):
     except:
         return 0
 
-#dit zijn handige functies om de rest mee te doen
-def get_formattedwords(text):
-    words = text.split()  # gets the wordlist
-    cleaned_words = []
-    for word in words:
-        new_word = word.encode('ascii','ignore').decode('utf-8') #makes it ascii
 
-        newer_word = re.sub(r'[^A-Za-z0-9]+|(\w+-\w+)+', '', new_word)
-        if newer_word != "":
-            cleaned_words.append(newer_word)
-    return cleaned_words
+# 6: als de method post wordt gebruikt
+# 7: bij image preloading
+# 8: Of het whatsapp bevat
+# 9: Het aantal srcs
+# 10: Het aantal hrefs
+# 11 t/m 13: correlatie volgens https://learn.microsoft.com/en-us/microsoft-365/security/office-365-security/anti-spam-policies-asf-settings-about?view=o365-worldwide
 
 
 
 # Hier worden de scripts uitgewerk met de gemaakte functies
-
 def get_stuff(q, lock, goodorbad):
     while True:
         # Wij gaan het opslaan in deze volgorde url, goede website, slechte website,(kenmerken) 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
@@ -106,30 +78,19 @@ def get_stuff(q, lock, goodorbad):
         #1
         characteristics.append(check_keywords(text.lower(), "triggerwords.txt") / len(text.strip()) * 100)
 
-
-        # 2
-        characteristics.append(check_whatsapp(page.text))
-
-        # 3 en 4
+        # 2 en 3
         characteristics.extend(urlcheck(url))
 
-        # 5
-        characteristics.append(check_POST(page.text))
-
-        # 6
-        characteristics.append(check_preloads(page.text))
-
-        # 7
+        # 4
         characteristics.append(check_special(page.text))
 
-        # 8
-        characteristics.append(check_srcs(page.text))
-
-        # 9
-        characteristics.append(check_hrefs(page.text))
-
-        # 10
+        # 5
         characteristics.append(get_oldness_days(url))
+
+        #Een lijstje van allemaal dingen die wij willen checken
+        HTMLelements = ["post", "preload", "whatsapp", "src=", "href=", "<form", "<iframe", "<img"]
+        for element in HTMLelements:
+            characteristics.append(page.text.lower().count(element) * len(element) / len(page.text) * 100)
 
         with lock:
             print(f"{characteristics},")
@@ -163,3 +124,8 @@ if __name__ == '__main__':
         good_queue.put(word.replace("\n", ""))
     good_queue.join()
     print("]\ndone")
+
+
+
+
+
