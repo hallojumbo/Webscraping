@@ -41,9 +41,6 @@ Earn Cash
 enlarge
 falling interest
 Financial Freedom
-font size=5
-font size=6
-font size=7
 free consultation
 Free Gift
 free investment
@@ -140,7 +137,6 @@ stock alert
 stock disclaimer statement
 stock pick
 stop snoring
-this email was not sent unsolicited
 this is an advertisement
 this is not spam
 to be removed from this list
