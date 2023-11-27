@@ -5,9 +5,6 @@ from bs4 import BeautifulSoup #beatufulsoup4
 import requests
 import whois #python-whois
 import datetime
-import re
-from threading import Thread, Lock
-from queue import Queue
 
 # de parameters die wij gaan toevoegen aan het neural network zijn
 # 1: Database voor scam triggerwoorden https://mailmeteor.com/blog/spam-words
