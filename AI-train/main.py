@@ -1,87 +1,5 @@
 import numpy as np
 import tensorflow as tf
-from urllib.parse import urlparse
-from bs4 import BeautifulSoup #beatufulsoup4
-import requests
-import whois #python-whois
-import datetime
-
-# de parameters die wij gaan toevoegen aan het neural network zijn
-# 1: Database voor scam triggerwoorden https://mailmeteor.com/blog/spam-words
-def check_keywords(text_lowered, file):
-    f = open(file, "r")
-    count = 0
-    for word in f.readlines():
-        count += text_lowered.count((word.replace("\n", "")).lower())
-    return count
-
-# 2: https of https
-# 3: lengte van de url
-def urlcheck(url):
-    if url[:5] == "https":
-        return [1, len(urlparse(url).netloc)]
-    return [0, len(urlparse(url).netloc)]
-
-# 4: dit soort characters: “//*” “<!” “ =” “//..//”.
-def check_special(page):
-    special = ["//*", "<!", " =", "//..//", "<!-- ", " -->"]
-    count = 0
-    for character in special:
-        count += page.count(character) * len(character)
-    return count / len(page) * 100
-
-# 5: hoe oud de website is
-def get_oldness_days(url):
-    try:
-        domain = urlparse(url).netloc
-        loaded_domain = whois.whois(domain) # get the whois data
-        date = loaded_domain.get("creation_date")
-        if isinstance(date, list): #if there are multiple dates
-            return (datetime.datetime.now() - date[0]).total_seconds() / 86400 # return the date difference in days
-        else:
-            return (datetime.datetime.now() - date).total_seconds() / 86400 # return the date difference in days
-    except:
-        return 0
-
-
-# 6: als de method post wordt gebruikt
-# 7: bij image preloading
-# 8: Of het whatsapp bevat
-# 9: Het aantal srcs
-# 10: Het aantal hrefs
-# 11 t/m 13: correlatie volgens https://learn.microsoft.com/en-us/microsoft-365/security/office-365-security/anti-spam-policies-asf-settings-about?view=o365-worldwide
-
-def get_stuff(url):
-    characteristics = []
-    # Dit zijn alle benodigdheden, een try statement voor als de website niet meer bestaat.
-    try:
-        page = requests.get(url, headers={'User-Agent': 'AdsBot-Google'})
-        soup = BeautifulSoup(page.text, 'html.parser')
-        text = soup.body.get_text(' ', strip=True)
-    except:
-        return 0
-
-    if(len(text) == 0):
-        return 0
-    
-    # 1
-    characteristics.append(check_keywords(text.lower(), "triggerwords.txt") / len(text.strip()) * 100)
-
-    # 2 en 3
-    characteristics.extend(urlcheck(url))
-
-    # 4
-    characteristics.append(check_special(page.text))
-
-    # 5
-    characteristics.append(get_oldness_days(url))
-
-    # Een lijstje van allemaal dingen die wij willen checken
-    HTMLelements = ["post", "preload", "whatsapp", "src=", "href=", "<form", "<iframe", "<object"]
-    for element in HTMLelements:
-        characteristics.append(page.text.lower().count(element) * len(element) / len(page.text) * 100)
-
-    return characteristics
 
 if __name__ == '__main__':
     badlist = [['https://www.recoverfunds-ltd.com', 0, 1, 0.8897388990520538, 'https', 24, 0.11641523730798375, 3.486580304201389, 0.0303092925535579, 0.019287731624991387, 0.0, 0.07715092649996555, 0.3203141144864642, 0.0034442377901770333, 0.0, 0.0303092925535579],
@@ -1171,19 +1089,7 @@ if __name__ == '__main__':
 
     model.fit([row[3:16] for row in biglist], [row[1:3] for row in biglist], epochs=50, batch_size=1, shuffle=True)
 
-    while True:
-        url = input("which url would you like to check? ")
-        data = [get_stuff(url)]
-        if data[0] != 0:
-            print(data)
-            for index in range(13):
-                data[0][index] -= average[index]
-                if deviation[index] != 0:
-                    data[0][index] /= deviation[index]
-            print(data)
-            print((model.predict(data)))
-        else:
-            print("cant find website")
+    model.save('scamDetector.keras')
 
 
 
