@@ -1,4 +1,4 @@
-import tensorflow as tf
+import keras
 from urllib.parse import urlparse
 from bs4 import BeautifulSoup #beatufulsoup4
 import requests
@@ -85,8 +85,7 @@ def get_stuff(url):
 if __name__ == '__main__':
     average = [0.61104044,    0.95825427,   20.49525617,   0.42170777, 4369.14721496, 0.08884886,    0.01439478,    0.01341572,    0.20849571,    0.59853586, 0.00965875,    0.00579614,    0.1085275 ]
     deviation = [0.42115669,    0.20000756,    6.68280216,    0.64935835, 4603.15875707, 0.12776998,    0.03932445,    0.11351909,    0.19531467,    0.47577819, 0.02506296,    0.03746394,    0.13103639]
-    model = tf.keras.models.load_model('scamDetector.keras')
-    print(model.get_config())
+    model = keras.models.load_model('scamDetector.keras')
 
     while True:
         url = input("which url would you like to check? ")
