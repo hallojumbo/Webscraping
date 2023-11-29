@@ -1,0 +1,11 @@
+Om toegang te krijgen tot het neural network zelf moet je deze stappen volgen.
+
+1: Ga naar het mapje AI-code.
+2: Download main.py, scamDetector.keras en triggerwords.txt
+3: Sleep nu alle apparten bestanden in een python project.
+het zou er nu zo uit moeten zien:     https://docs.google.com/drawings/d/1trarBVhU8sn5rcv9URtQEUL-ya7rt_8OXBymBGkxVoQ/edit?usp=sharing 
+4: Ga nu in het bestand main.py terwijl je je in de phython omgeving bevind.
+5: 
+5: Druk op de groene pijl.
+6: Laat het ongeveer 1 minuut opstarten en dan zou het er zo uit moeten zien: https://docs.google.com/drawings/d/1FP-16D8E272cDJ-Byz-xR4k8hEbbWCz8Ja_q8DbzIY0/edit?usp=sharing
+7: Nu kun je onderin de url stoppen die je wilt checken. (zorg dat je de volledige url gebruikt dus niet youtube maar: https://www.youtube.com/
