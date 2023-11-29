@@ -92,6 +92,7 @@ if __name__ == '__main__':
         data = [get_stuff(url)]
         if data[0] != 0:
             print(data)
+            print("Als veel van de data gelijk is aan 0, is de voorspelling niet accuraat")
             for index in range(13):
                 data[0][index] -= average[index]
                 if deviation[index] != 0:
