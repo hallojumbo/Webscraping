@@ -88,7 +88,7 @@ if __name__ == '__main__':
     model = tf.keras.models.load_model('scamDetector.keras')
 
     while True:
-        url = input("which url would you like to check? ")
+        url = input("Welke url wilt u checken? ")
         data = [get_stuff(url)]
         if data[0] != 0:
             print(data)
@@ -100,7 +100,7 @@ if __name__ == '__main__':
             print(data)
             print((model.predict(data)))
         else:
-            print("cant find website")
+            print("Kan de website niet vinden")
 
 
 
