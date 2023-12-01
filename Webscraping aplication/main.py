@@ -57,7 +57,7 @@ def get_oldness_days(url):
 # Hier worden de scripts uitgewerk met de gemaakte functies
 def get_stuff(q, lock, goodorbad):
     while True:
-        # Wij gaan het opslaan in deze volgorde url, goede website, slechte website,(kenmerken) 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+        # Wij gaan het opslaan in deze volgorde url, goede website, slechte website,(kenmerken) 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
         # de goodorbad moet [1, 0] zijn voor good en [0, 1] zijn voor bad
         url = q.get()
         q.task_done()
