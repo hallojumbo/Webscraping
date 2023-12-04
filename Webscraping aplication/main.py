@@ -8,7 +8,7 @@ from threading import Thread, Lock
 from queue import Queue
 
 # de parameters die wij gaan toevoegen aan het neural network zijn
-# 1: Database voor scam triggerwoorden https://mailmeteor.com/blog/spam-words
+# 1: Database voor scam triggerwoorden https://help.salesforce.com/s/articleView?id=sf.mc_es_trigger_words.htm&type=5 
 def check_keywords(text_lowered, file):
     f = open(file, "r")
     count = 0
