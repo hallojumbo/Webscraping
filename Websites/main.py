@@ -27,9 +27,7 @@ def getGoodWebsites():
                 counter += 1
                 print(f"Succesfully written url, count is {counter}\n")
             if(counter == 500):
-                Goodwebsites.close()
                 return
-        Goodwebsites.close()
 
 def getBadWebsites():
     counter = 0 #we only want 500 websites
@@ -45,9 +43,7 @@ def getBadWebsites():
                         counter += 1
                         print(f"Succesfully written url, count is {counter}\n")
                 if counter == 500:
-                    Badwebsites.close()
                     return
-        Badwebsites.close()
 
 if __name__ == '__main__':
     print("\nStarting good websites")
