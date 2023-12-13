@@ -11,4 +11,4 @@ het zou er nu zo uit moeten zien:    https://docs.google.com/drawings/d/1trarBVh
 1. Ga nu in het bestand `main.py` terwijl je je in de python omgeving bevind.
 1. Druk op de groene pijl.
 1. Laat het ongeveer 1 minuut opstarten en dan zou het er zo uit moeten zien: https://docs.google.com/drawings/d/1FP-16D8E272cDJ-Byz-xR4k8hEbbWCz8Ja_q8DbzIY0/edit?usp=sharing
-1. Nu kun je onderin de url stoppen die je wilt checken. (zorg dat je de volledige url gebruikt dus niet youtube maar: https://www.youtube.com/)
+1. Nu kun je onderin de url stoppen die je wilt checken. (zorg dat je de volledige url gebruikt dus niet "youtube" maar: "https://www.youtube.com/")
