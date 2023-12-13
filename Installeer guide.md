@@ -5,7 +5,8 @@ Om toegang te krijgen tot het neural network zelf moet je deze stappen volgen.
 
 1. Ga naar het mapje AI-code in het Github project.
 1. Download `main.py`, `scamDetector.keras`, `triggerwords.txt` en `requirements.txt`
-1. Sleep nu alle gedownloade bestanden in een python project.
+2. stop deze bestanden in een folder
+1. Open pycharm en selecteer de gekozen folder die alleen de bestanden `main.py`, `scamDetector.keras`, `triggerwords.txt` en `requirements.txt` bevat.
 het zou er nu zo uit moeten zien:    https://docs.google.com/drawings/d/1trarBVhU8sn5rcv9URtQEUL-ya7rt_8OXBymBGkxVoQ/edit?usp=sharing 
 1. Ga nu in het bestand `main.py` terwijl je je in de python omgeving bevind.
 1. Druk op de groene pijl.
