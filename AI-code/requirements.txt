@@ -1,0 +1,6 @@
+## gebruik Python 3.10
+## installeer met  pip install -r requirements.txt
+beautifulsoup4==4.12.2
+python-whois==0.8.0
+tensorflow==2.13.0
+keras==2.14.0
