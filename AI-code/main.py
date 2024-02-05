@@ -108,7 +108,7 @@ if __name__ == "__main__":
                 if deviation[index] != 0:
                     data[0][index] /= deviation[index]
             print(data)
-            print(f'Percentage betrouwbare eigenschappen: {(model.predict(data))[0][0] * 100}%\Percentage frauduleuze eigenschappen: {(model.predict(data))[0][1]}%')
+            print(f'Percentage betrouwbare eigenschappen: {(model.predict(data))[0][0] * 100}%\Percentage frauduleuze eigenschappen: {(model.predict(data))[0][1] * 100}%')
         else:
             print("Kan de website niet vinden")
 
