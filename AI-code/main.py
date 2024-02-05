@@ -1,6 +1,6 @@
 import tensorflow as tf
 from urllib.parse import urlparse
-from bs4 import BeautifulSoup  # beautifulsoup4
+from bs4 import BeautifulSoup  # beatufulsoup4
 import requests
 import whois  # python-whois
 import datetime
@@ -108,7 +108,7 @@ if __name__ == "__main__":
                 if deviation[index] != 0:
                     data[0][index] /= deviation[index]
             print(data)
-            print(f'Hoeveelheid betrouwbare eigenschappen van 0-1: {(model.predict(data))[0]}\nHoeveelheid frauduleuze van 0-1: {(model.predict(data))[1]}')
+            print(f'Hoeveelheid betrouwbare eigenschappen van 0-1: {(model.predict(data))[0][0]}\nHoeveelheid frauduleuze van 0-1: {(model.predict(data))[0][1]}')
         else:
             print("Kan de website niet vinden")
 
